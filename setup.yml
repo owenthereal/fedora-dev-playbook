@@ -1,0 +1,50 @@
+- hosts: localhost
+  tasks:
+    - name: Install packages
+      become: true
+      package:
+        name:
+          - bat
+          - curl
+          - fzf
+          - git
+          - go
+          - jq
+          - kubernetes-client
+          - nodejs
+          - openssh
+          - ruby
+          - tmux
+          - vim
+          - zsh
+          - zsh-syntax-highlighting
+          - zsh-autosuggestions
+          - util-linux-user
+    - name: Download Dotfiles
+      git:
+        repo: https://github.com/jingweno/dotfiles.git
+        dest: ~/.dotfiles
+    - name: Link Dotfiles
+      file:
+        src: '~/.dotfiles/{{ item }}'
+        dest: '~/{{ item }}'
+        state: link
+      loop:
+        - .gemrc
+        - .gitignore
+        - .gitconfig
+        - .irbrc
+        - .spacevim
+        - .tmux.conf
+    - name: Enable Night Light
+      dconf:
+        key: /org/gnome/settings-daemon/plugins/color/night-light-enabled
+        value: "true"
+    - name: Enable Flathub repository
+      command: flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+    - name: Install Spotify
+      command: flatpak install --assumeyes flathub com.spotify.Client
+    - name: Install Discord
+      command: flatpak install --assumeyes flathub com.discordapp.Discord
+    - name: Install Slack
+      command: flatpak install --assumeyes flathub com.slack.Slack
