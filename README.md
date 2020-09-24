@@ -19,3 +19,17 @@ pip3 install --user psutil
 ```
 ~/.local/bin/ansible-playbook -K setup.yml
 ```
+
+4. Install Oh My Zsh
+
+```
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+```
+
+5. Install space-vim
+
+```
+bash <(curl -fsSL https://raw.githubusercontent.com/liuchengxu/space-vim/master/install.sh)
+```
+
+6. Configure Caplock as Ctrl: https://unix.stackexchange.com/a/253497

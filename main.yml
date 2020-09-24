@@ -8,18 +8,21 @@
           - curl
           - fzf
           - git
+          - gnome-tweak-tool
           - go
+          - hub
           - jq
           - kubernetes-client
           - nodejs
           - openssh
           - ruby
           - tmux
+          - util-linux-user
           - vim
+          - xclip
           - zsh
           - zsh-syntax-highlighting
           - zsh-autosuggestions
-          - util-linux-user
     - name: Download Dotfiles
       git:
         repo: https://github.com/jingweno/dotfiles.git
