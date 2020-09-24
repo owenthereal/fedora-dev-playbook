@@ -1,6 +1,7 @@
 - hosts: localhost
   tasks:
-    - name: Add Docker Repo
+    # dnf packages start
+    - name: Add extra dnf repos
       become: true
       command:
         cmd: dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
@@ -32,7 +33,8 @@
           - zsh
           - zsh-syntax-highlighting
           - zsh-autosuggestions
-
+    # dnf packages end
+    #
     - name: Change Shell to Zsh
       command: chsh -s /usr/bin/zsh
 
@@ -103,11 +105,14 @@
       dconf:
         key: /org/gnome/settings-daemon/plugins/color/night-light-enabled
         value: "true"
+
+    # Flathub starts
     - name: Enable Flathub repository
       command: flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-    - name: Install Spotify
-      command: flatpak install --assumeyes flathub com.spotify.Client
-    - name: Install Discord
-      command: flatpak install --assumeyes flathub com.discordapp.Discord
-    - name: Install Slack
-      command: flatpak install --assumeyes flathub com.slack.Slack
+    - name: Install Flathub Packages
+      command: flatpak install --assumeyes flathub {{ item }}
+      loop:
+        - com.spotify.Client
+        - com.discordapp.Discord
+        - com.slack.Slack
+    # Flathub ends
