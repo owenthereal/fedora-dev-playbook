@@ -1,11 +1,19 @@
 - hosts: localhost
   tasks:
+    - name: Add Docker Repo
+      become: true
+      command:
+        cmd: dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+        warn: false
     - name: Install packages
       become: true
       package:
         name:
           - bat
           - curl
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
           - fzf
           - git
           - gnome-tweak-tool
@@ -13,6 +21,7 @@
           - hub
           - jq
           - kubernetes-client
+          - make
           - nodejs
           - openssh
           - ruby
@@ -25,7 +34,7 @@
           - zsh-autosuggestions
     - name: Download Dotfiles
       git:
-        repo: https://github.com/jingweno/dotfiles.git
+        repo: git@github.com:jingweno/dotfiles.git
         dest: ~/.dotfiles
     - name: Link Dotfiles
       file:
@@ -39,6 +48,14 @@
         - .irbrc
         - .spacevim
         - .tmux.conf
+        - .zshrc
+        - .zshrc.linux
+    - name: Start Docker
+      become: true
+      command: systemctl enable docker
+    - name: Add User To Docker Group
+      become: true
+      command: gpasswd -a ${USER} docker
     - name: Enable Night Light
       dconf:
         key: /org/gnome/settings-daemon/plugins/color/night-light-enabled
