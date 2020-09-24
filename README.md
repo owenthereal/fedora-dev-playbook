@@ -22,3 +22,5 @@ pip3 install --user psutil
 ```
 
 4. Configure CAPS as CTRL and Swap WIN & ALT: https://unix.stackexchange.com/a/253497
+
+5. Install Topicons for Dropbox: https://extensions.gnome.org/extension/1031/topicons/
