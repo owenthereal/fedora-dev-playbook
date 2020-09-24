@@ -50,12 +50,24 @@
         - .tmux.conf
         - .zshrc
         - .zshrc.linux
+    # Docker starts
+    # Ref: https://www.linuxuprising.com/2019/11/how-to-install-and-use-docker-on-fedora.html
     - name: Start Docker
       become: true
-      command: systemctl enable docker
+      command: systemctl enable --now docker
     - name: Add User To Docker Group
       become: true
-      command: gpasswd -a ${USER} docker
+      command: usermod -aG docker ${USER}
+    - name: Drop to cgroup1 for Docker
+      become: true
+      command: grubby --update-kernel=ALL --args="systemd.unified_cgroup_hierarchy=0"
+    - name: Fix Docker Network
+      become: true
+      command: firewall-cmd --permanent --zone trusted --add-interface docker0
+    - name: Reload Network After Docker Fix
+      become: true
+      command: firewall-cmd --reload
+    # Docker ends
     - name: Enable Night Light
       dconf:
         key: /org/gnome/settings-daemon/plugins/color/night-light-enabled
