@@ -3,6 +3,7 @@
 ```
 sudo dnf update
 sudo dnf install python3-devel
+
 # Can't install Ansible with dnf due to https://github.com/ansible/ansible-runner/issues/54#issuecomment-516400702
 pip3 install --user ansible
 pip3 install --user psutil 
@@ -20,16 +21,4 @@ pip3 install --user psutil
 ~/.local/bin/ansible-playbook -K setup.yml
 ```
 
-4. Install Oh My Zsh
-
-```
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-```
-
-5. Install space-vim
-
-```
-bash <(curl -fsSL https://raw.githubusercontent.com/liuchengxu/space-vim/master/install.sh)
-```
-
-6. Configure Caplock as Ctrl: https://unix.stackexchange.com/a/253497
+4. Configure CAPS as CTRL and Swap WIN & ALT: https://unix.stackexchange.com/a/253497

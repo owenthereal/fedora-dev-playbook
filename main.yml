@@ -32,6 +32,33 @@
           - zsh
           - zsh-syntax-highlighting
           - zsh-autosuggestions
+
+    - name: Change Shell to Zsh
+      command: chsh -s /usr/bin/zsh
+
+    # Oh My Zsh starts
+    - name: Remove Oh My Zsh
+      file:
+        path: ~/.oh-my-zsh
+        state: absent
+    - name: Download Oh My Zsh
+      get_url:
+        url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+        dest: /tmp/oh-my-zsh-install.sh
+    - name: Install Oh My Zsh
+      script: /tmp/oh-my-zsh-install.sh
+    # Oh My Zsh ends
+    
+    # space-vim starts
+    - name: Download space-vim
+      get_url:
+        url: https://raw.githubusercontent.com/liuchengxu/space-vim/master/install.sh
+        dest: /tmp/space-vim-install.sh
+    - name: Install space-vim
+      script: /tmp/space-vim-install.sh
+    # space-vim ends
+
+    # Dotfiles starts
     - name: Download Dotfiles
       git:
         repo: git@github.com:jingweno/dotfiles.git
@@ -41,6 +68,7 @@
         src: '~/.dotfiles/{{ item }}'
         dest: '~/{{ item }}'
         state: link
+        force: true
       loop:
         - .gemrc
         - .gitignore
@@ -50,6 +78,8 @@
         - .tmux.conf
         - .zshrc
         - .zshrc.linux
+    # Dotfiles ends
+    
     # Docker starts
     # Ref: https://www.linuxuprising.com/2019/11/how-to-install-and-use-docker-on-fedora.html
     - name: Start Docker
@@ -68,6 +98,7 @@
       become: true
       command: firewall-cmd --reload
     # Docker ends
+    
     - name: Enable Night Light
       dconf:
         key: /org/gnome/settings-daemon/plugins/color/night-light-enabled
