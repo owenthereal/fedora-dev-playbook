@@ -4,8 +4,11 @@
     - name: Add extra dnf repos
       become: true
       command:
-        cmd: dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+        cmd: 'dnf config-manager --add-repo {{ item }}'
         warn: false
+      loop:
+        - https://download.docker.com/linux/fedora/docker-ce.repo
+        - https://cli.github.com/packages/rpm/gh-cli.repo
     - name: Install packages
       become: true
       package:
@@ -16,6 +19,7 @@
           - docker-ce-cli
           - containerd.io
           - fzf
+          - gh
           - git
           - gnome-tweak-tool
           - go
