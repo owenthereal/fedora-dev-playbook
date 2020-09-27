@@ -27,7 +27,6 @@
           - jq
           - kubernetes-client
           - make
-          - nodejs
           - openssh
           - ruby
           - tmux
@@ -38,32 +37,24 @@
           - zsh-syntax-highlighting
           - zsh-autosuggestions
     # dnf packages end
-    #
+
     - name: Change Shell to Zsh
       command: chsh -s /usr/bin/zsh
 
-    # Oh My Zsh starts
-    - name: Remove Oh My Zsh
+    # Remove oh-my-zsh
+    - name: Remove oh-my-zsh
       file:
         path: ~/.oh-my-zsh
         state: absent
-    - name: Download Oh My Zsh
-      get_url:
-        url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
-        dest: /tmp/oh-my-zsh-install.sh
-    - name: Install Oh My Zsh
-      script: /tmp/oh-my-zsh-install.sh
-    # Oh My Zsh ends
+    - include_tasks: install.yml
+      with_items:
+        - name: oh-my-zsh
+          url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
+        - name: space-vim
+          url: https://raw.githubusercontent.com/liuchengxu/space-vim/master/install.sh
+        - name: nodenv
+          url: https://raw.githubusercontent.com/nodenv/nodenv-installer/master/bin/nodenv-installer
     
-    # space-vim starts
-    - name: Download space-vim
-      get_url:
-        url: https://raw.githubusercontent.com/liuchengxu/space-vim/master/install.sh
-        dest: /tmp/space-vim-install.sh
-    - name: Install space-vim
-      script: /tmp/space-vim-install.sh
-    # space-vim ends
-
     # Dotfiles starts
     - name: Download Dotfiles
       git:

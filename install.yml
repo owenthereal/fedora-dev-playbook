@@ -1,0 +1,11 @@
+---
+- name: 'Download {{ item.name }}'
+  get_url:
+    url: '{{ item.url }}'
+    dest: '/tmp/{{ item.name }}'
+- name: 'Install {{ item.name  }}'
+  script: '/tmp/{{ item.name }}'
+- name: 'Remove {{ item.name }}'
+  file:
+    path: '/tmp/{{ item.name }}'
+    state: absent
