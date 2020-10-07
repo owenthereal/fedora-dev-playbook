@@ -27,11 +27,13 @@
           - jq
           - kubernetes-client
           - make
+          - neovim
           - openssh
           - ruby
           - tmux
           - util-linux-user
           - vim
+          - vim-X11
           - xclip
           - zsh
           - zsh-syntax-highlighting
@@ -39,6 +41,7 @@
     # dnf packages end
 
     - name: Change Shell to Zsh
+      become: true
       command: chsh -s /usr/bin/zsh
 
     # Remove oh-my-zsh
@@ -52,8 +55,9 @@
           url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
         - name: space-vim
           url: https://raw.githubusercontent.com/liuchengxu/space-vim/master/install.sh
-        - name: nodenv
-          url: https://raw.githubusercontent.com/nodenv/nodenv-installer/master/bin/nodenv-installer
+          args: --all
+            #- name: nodenv
+            #url: https://raw.githubusercontent.com/nodenv/nodenv-installer/master/bin/nodenv-installer
     
     # Dotfiles starts
     - name: Download Dotfiles

@@ -18,7 +18,7 @@ pip3 install --user psutil
 3. Run playbook
 
 ```
-~/.local/bin/ansible-playbook -K setup.yml
+~/.local/bin/ansible-playbook -K main.yml
 ```
 
 4. Configure CAPS as CTRL and Swap WIN & ALT: https://unix.stackexchange.com/a/253497
