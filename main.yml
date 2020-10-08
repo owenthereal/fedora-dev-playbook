@@ -7,7 +7,6 @@
         cmd: 'dnf config-manager --add-repo {{ item }}'
         warn: false
       loop:
-        - https://download.docker.com/linux/fedora/docker-ce.repo
         - https://cli.github.com/packages/rpm/gh-cli.repo
     - name: Install packages
       become: true
@@ -15,8 +14,7 @@
         name:
           - bat
           - curl
-          - docker-ce
-          - docker-ce-cli
+          - docker-compose
           - containerd.io
           - fzf
           - gh
@@ -27,6 +25,7 @@
           - jq
           - kubernetes-client
           - make
+          - moby-engine
           - neovim
           - openssh
           - ruby
@@ -82,13 +81,13 @@
     # Dotfiles ends
     
     # Docker starts
-    # Ref: https://www.linuxuprising.com/2019/11/how-to-install-and-use-docker-on-fedora.html
+    # Ref: https://fedoramagazine.org/docker-and-fedora-32
     - name: Start Docker
       become: true
-      command: systemctl enable --now docker
+      command: systemctl enable docker
     - name: Add User To Docker Group
       become: true
-      command: usermod -aG docker ${USER}
+      command: usermod -aG docker $USER
     - name: Drop to cgroup1 for Docker
       become: true
       command: grubby --update-kernel=ALL --args="systemd.unified_cgroup_hierarchy=0"
