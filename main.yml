@@ -55,6 +55,9 @@
         - name: space-vim
           url: https://raw.githubusercontent.com/liuchengxu/space-vim/master/install.sh
           args: --all
+        - name: goup
+          url: https://raw.githubusercontent.com/jingweno/goup/master/install.sh
+          args: --skip-prompt
             #- name: nodenv
             #url: https://raw.githubusercontent.com/nodenv/nodenv-installer/master/bin/nodenv-installer
     
