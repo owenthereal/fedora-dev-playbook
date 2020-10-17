@@ -14,8 +14,6 @@
         name:
           - bat
           - curl
-          - docker-compose
-          - containerd.io
           - fzf
           - gh
           - git
@@ -25,7 +23,6 @@
           - jq
           - kubernetes-client
           - make
-          - moby-engine
           - neovim
           - openssh
           - ruby
@@ -58,6 +55,8 @@
         - name: goup
           url: https://raw.githubusercontent.com/jingweno/goup/master/install.sh
           args: --skip-prompt
+        - name: docker
+          url: https://get.docker.com/rootless 
             #- name: nodenv
             #url: https://raw.githubusercontent.com/nodenv/nodenv-installer/master/bin/nodenv-installer
     
@@ -82,22 +81,36 @@
         - .zshrc
         - .zshrc.linux
     # Dotfiles ends
-    
-    # Docker starts
-    # Ref: https://fedoramagazine.org/docker-and-fedora-32
+
+    # Rootless Docker starts
+    # Ref: https://docs.docker.com/engine/security/rootless
+    - name: Enable Docker
+      command: systemctl --user enable docker
     - name: Start Docker
-      become: true
-      command: systemctl enable docker
-    - name: Add User To Docker Group
-      become: true
-      command: usermod -aG docker $USER
+      command: systemctl --user start docker
     - name: Drop to cgroup1 for Docker
       become: true
       command: grubby --update-kernel=ALL --args="systemd.unified_cgroup_hierarchy=0"
     - name: Fix Docker Network
       become: true
       command: firewall-cmd --permanent --zone trusted --add-interface docker0
-    # Docker ends
+    # Rootless Docker ends
+    
+    # Rootful Docker starts
+    # Ref: https://fedoramagazine.org/docker-and-fedora-32
+    # - name: Start Docker
+      # become: true
+      # command: systemctl enable docker
+    # - name: Add User To Docker Group
+      # become: true
+      # command: usermod -aG docker $USER
+    # - name: Drop to cgroup1 for Docker
+      # become: true
+      # command: grubby --update-kernel=ALL --args="systemd.unified_cgroup_hierarchy=0"
+    # - name: Fix Docker Network
+      # become: true
+      # command: firewall-cmd --permanent --zone trusted --add-interface docker0
+    # Rootful Docker ends
     
     - name: Enable Night Light
       dconf:
