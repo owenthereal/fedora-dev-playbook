@@ -14,6 +14,7 @@
         name:
           - bat
           - curl
+          - direnv
           - fzf
           - gh
           - git
@@ -25,6 +26,7 @@
           - make
           - neovim
           - openssh
+          - postgresql
           - ruby
           - tmux
           - util-linux-user
