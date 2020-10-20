@@ -33,6 +33,7 @@
           - util-linux-user
           - vim
           - vim-X11
+          - "@virtualization"
           - xclip
           - zsh
           - zsh-syntax-highlighting
