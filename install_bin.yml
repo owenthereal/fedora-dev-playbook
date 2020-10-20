@@ -1,0 +1,13 @@
+---
+- name: "Mkdir $HOME/bin"
+  file:
+      path: "{{ lookup('env', 'HOME') }}/bin"
+      state: directory
+- name: "Download {{ item.name }}"
+  get_url:
+      url: "{{ item.url }}"
+      dest: "{{ lookup('env', 'HOME') }}/bin/{{ item.name }}"
+- name: "Chmod"
+  file:
+      path: "{{ lookup('env', 'HOME') }}/bin/{{ item.name }}"
+      mode: a+x

@@ -44,12 +44,11 @@
       become: true
       command: chsh -s /usr/bin/zsh
 
-    # Remove oh-my-zsh
     - name: Remove oh-my-zsh
       file:
         path: ~/.oh-my-zsh
         state: absent
-    - include_tasks: install.yml
+    - include_tasks: install_script.yml
       with_items:
         - name: oh-my-zsh
           url: https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh
@@ -63,6 +62,19 @@
           url: https://get.docker.com/rootless 
             #- name: nodenv
             #url: https://raw.githubusercontent.com/nodenv/nodenv-installer/master/bin/nodenv-installer
+
+    # kubectl version
+    - name: Get latest kubectl version
+      shell: "curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt"
+      register: get_kubectl_version
+    - set_fact:
+        kubectl_version={{ get_kubectl_version.stdout }}
+    # kubectl version
+
+    - include_tasks: install_bin.yml
+      with_items:
+        - name: kubectl
+          url: "https://storage.googleapis.com/kubernetes-release/release/{{ kubectl_version }}/bin/linux/amd64/kubectl"
     
     # Dotfiles starts
     - name: Download Dotfiles
