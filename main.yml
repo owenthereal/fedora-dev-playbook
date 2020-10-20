@@ -15,6 +15,7 @@
           - bat
           - curl
           - direnv
+          - docker-compose
           - fzf
           - gh
           - git
