@@ -75,6 +75,8 @@
       with_items:
         - name: kubectl
           url: "https://storage.googleapis.com/kubernetes-release/release/{{ kubectl_version }}/bin/linux/amd64/kubectl"
+        - name: minikube
+          url: https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
     
     # Dotfiles starts
     - name: Download Dotfiles
