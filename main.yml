@@ -60,12 +60,18 @@
           args: --skip-prompt
         - name: docker
           url: https://get.docker.com/rootless 
+        - name: helm
+          url: https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+          envs:
+              HELM_INSTALL_DIR: "{{ lookup('env', 'HOME') }}/bin"
+              USE_SUDO: false
             #- name: nodenv
             #url: https://raw.githubusercontent.com/nodenv/nodenv-installer/master/bin/nodenv-installer
 
     # kubectl version
     - name: Get latest kubectl version
-      shell: "curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt"
+      command: "curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt"
+      warn: false
       register: get_kubectl_version
     - set_fact:
         kubectl_version={{ get_kubectl_version.stdout }}

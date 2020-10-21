@@ -5,6 +5,7 @@
     dest: "/tmp/{{ item.name }}"
 - name: "Install {{ item.name  }}"
   script: "/tmp/{{ item.name }} {{ item.args | default('') }}"
+  environment: "{{ item.envs | default({}) }}"
 - name: "Remove {{ item.name }}"
   file:
     path: "/tmp/{{ item.name }}"
