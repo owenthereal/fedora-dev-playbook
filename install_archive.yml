@@ -1,0 +1,23 @@
+---
+- name: "Mkdir /tmp/{{ item.name }}"
+  file:
+      path: "/tmp/{{ item.name }}"
+      state: directory
+- name: "Unarchive {{ item.url.split('/')[-1] }}"
+  unarchive:
+      src: "{{ item.url }}"
+      dest: "/tmp/{{ item.name }}"
+      remote_src: yes
+- name: "Mkdir $HOME/bin"
+  file:
+      path: "{{ lookup('env', 'HOME') }}/bin"
+      state: directory
+- name: "Copy {{ item.name }}"
+  copy:
+      src: "/tmp/{{ item.name }}/{{ item.name }}"
+      dest: "{{ lookup('env', 'HOME') }}/bin/{{ item.name }}"
+      mode: a+x
+- name: "Remove {{ item.name }}"
+  file:
+      path: "/tmp/{{ item.name }}"
+      state: absent

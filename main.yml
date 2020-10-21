@@ -69,20 +69,30 @@
             #url: https://raw.githubusercontent.com/nodenv/nodenv-installer/master/bin/nodenv-installer
 
     # kubectl version
-    - name: Get latest kubectl version
+    - name: fetch_kubectl_version
       command: "curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt"
-      warn: false
       register: get_kubectl_version
     - set_fact:
         kubectl_version={{ get_kubectl_version.stdout }}
     # kubectl version
-
+    
     - include_tasks: install_bin.yml
       with_items:
         - name: kubectl
           url: "https://storage.googleapis.com/kubernetes-release/release/{{ kubectl_version }}/bin/linux/amd64/kubectl"
         - name: minikube
           url: https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+
+    - name: fetch_terraform_version
+      shell: "curl -s https://api.github.com/repos/hashicorp/terraform/releases/latest  | jq -r '.tag_name' | tr -d v"
+      register: get_terraform_version
+    - set_fact:
+        terraform_version={{ get_terraform_version.stdout }}
+
+    - include_tasks: install_archive.yml
+      with_items:
+        - name: terraform
+          url: "https://releases.hashicorp.com/terraform/{{ terraform_version }}/terraform_{{ terraform_version }}_linux_amd64.zip"
     
     # Dotfiles starts
     - name: Download Dotfiles
