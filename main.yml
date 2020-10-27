@@ -129,6 +129,12 @@
       become: true
       command: firewall-cmd --permanent --zone trusted --add-interface docker0
     # Rootless Docker ends
+
+    # kvm starts
+    - name: Add User To libvirt Group
+      become: true
+      command: usermod -aG libvirt $USER
+    # kvm ends
     
     # Rootful Docker starts
     # Ref: https://fedoramagazine.org/docker-and-fedora-32
