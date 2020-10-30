@@ -168,4 +168,6 @@
         - com.slack.Slack
         - com.spotify.Client
         - com.visualstudio.code
+        - org.gimp.GIMP
+        - us.zoom.Zoom
     # Flathub ends
