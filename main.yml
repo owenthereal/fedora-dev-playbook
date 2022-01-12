@@ -169,5 +169,6 @@
         - com.spotify.Client
         - com.visualstudio.code
         - org.gimp.GIMP
+        - org.gnome.Extensions
         # - us.zoom.Zoom follow https://support.zoom.us/hc/en-us/articles/204206269-Installing-or-updating-Zoom-on-Linux#h_825b50ac-ad15-44a8-9959-28c97e4803ef
     # Flathub ends
