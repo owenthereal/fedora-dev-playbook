@@ -8,6 +8,9 @@
         warn: false
       loop:
         - https://cli.github.com/packages/rpm/gh-cli.repo
+        # Rootful Docker starts
+        - https://download.docker.com/linux/fedora/docker-ce.repo
+        # Rootful Docker ends
     - name: Install packages
       become: true
       package:
@@ -15,7 +18,6 @@
           - bat
           - curl
           - direnv
-          - docker-compose
           - fzf
           - gh
           - git
@@ -38,6 +40,12 @@
           - zsh
           - zsh-syntax-highlighting
           - zsh-autosuggestions
+          # Rootful Docker starts
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          # Rootful Docker ends
+          - docker-compose
     # dnf packages end
 
     - name: Change Shell to Zsh
@@ -58,8 +66,8 @@
         - name: goup
           url: https://raw.githubusercontent.com/jingweno/goup/master/install.sh
           args: --skip-prompt
-        - name: docker
-          url: https://get.docker.com/rootless 
+        # - name: docker
+          # url: https://get.docker.com/rootless
         - name: helm
           url: https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
           envs:
@@ -75,7 +83,7 @@
     - set_fact:
         kubectl_version={{ get_kubectl_version.stdout }}
     # kubectl version
-    
+
     - include_tasks: install_bin.yml
       with_items:
         - name: kubectl
@@ -93,7 +101,7 @@
       with_items:
         - name: terraform
           url: "https://releases.hashicorp.com/terraform/{{ terraform_version }}/terraform_{{ terraform_version }}_linux_amd64.zip"
-    
+
     # Dotfiles starts
     - name: Download Dotfiles
       git:
@@ -118,16 +126,16 @@
 
     # Rootless Docker starts
     # Ref: https://docs.docker.com/engine/security/rootless
-    - name: Enable Docker
-      command: systemctl --user enable docker
-    - name: Start Docker
-      command: systemctl --user start docker
-    - name: Drop to cgroup1 for Docker
-      become: true
-      command: grubby --update-kernel=ALL --args="systemd.unified_cgroup_hierarchy=0"
-    - name: Fix Docker Network
-      become: true
-      command: firewall-cmd --permanent --zone trusted --add-interface docker0
+    # - name: Enable Docker
+      # command: systemctl --user enable docker
+    # - name: Start Docker
+      # command: systemctl --user start docker
+    # - name: Drop to cgroup1 for Docker
+      # become: true
+      # command: grubby --update-kernel=ALL --args="systemd.unified_cgroup_hierarchy=0"
+    # - name: Fix Docker Network
+      # become: true
+      # command: firewall-cmd --permanent --zone trusted --add-interface docker0
     # Rootless Docker ends
 
     # kvm starts
@@ -135,23 +143,20 @@
       become: true
       command: usermod -aG libvirt $USER
     # kvm ends
-    
+
     # Rootful Docker starts
     # Ref: https://fedoramagazine.org/docker-and-fedora-32
-    # - name: Start Docker
-      # become: true
-      # command: systemctl enable docker
-    # - name: Add User To Docker Group
-      # become: true
-      # command: usermod -aG docker $USER
-    # - name: Drop to cgroup1 for Docker
-      # become: true
-      # command: grubby --update-kernel=ALL --args="systemd.unified_cgroup_hierarchy=0"
-    # - name: Fix Docker Network
-      # become: true
-      # command: firewall-cmd --permanent --zone trusted --add-interface docker0
+    - name: Start Docker
+      become: true
+      command: systemctl enable docker
+    - name: Add User To Docker Group
+      become: true
+      command: usermod -aG docker $USER
+    - name: Fix Docker Network
+      become: true
+      command: firewall-cmd --permanent --zone trusted --add-interface docker0
     # Rootful Docker ends
-    
+
     - name: Enable Night Light
       dconf:
         key: /org/gnome/settings-daemon/plugins/color/night-light-enabled
