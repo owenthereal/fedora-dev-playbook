@@ -99,8 +99,12 @@
 
     - include_tasks: install_archive.yml
       with_items:
-        - name: terraform
-          url: "https://releases.hashicorp.com/terraform/{{ terraform_version }}/terraform_{{ terraform_version }}_linux_amd64.zip"
+        - url: "https://releases.hashicorp.com/terraform/{{ terraform_version }}/terraform_{{ terraform_version }}_linux_amd64.zip"
+          bin_in_tar: terraform
+          name: terraform
+        - url: https://github.com/kubernetes-sigs/krew/releases/latest/download/krew-linux_amd64.tar.gz
+          bin_in_tar: krew-linux_amd64
+          name: krew
 
     # Dotfiles starts
     - name: Download Dotfiles

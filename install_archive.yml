@@ -14,7 +14,7 @@
       state: directory
 - name: "Copy {{ item.name }}"
   copy:
-      src: "/tmp/{{ item.name }}/{{ item.name }}"
+      src: "/tmp/{{ item.name }}/{{ item.bin_in_tar }}"
       dest: "{{ lookup('env', 'HOME') }}/bin/{{ item.name }}"
       mode: a+x
 - name: "Remove {{ item.name }}"
