@@ -29,13 +29,16 @@
           - make
           - neovim
           - openssh
+          - openssl
           - postgresql
+          - python3-devel
           - ruby
           - tmux
           - util-linux-user
           - vim
           - vim-X11
           - "@virtualization"
+          - wl-clipboard
           - xclip
           - zsh
           - zsh-syntax-highlighting
@@ -47,6 +50,11 @@
           # Rootful Docker ends
           - docker-compose
     # dnf packages end
+
+    - name: Creates bin dir
+      file:
+        path: ~/bin
+        state: directory
 
     - name: Change Shell to Zsh
       become: true
@@ -90,6 +98,8 @@
           url: "https://storage.googleapis.com/kubernetes-release/release/{{ kubectl_version }}/bin/linux/amd64/kubectl"
         - name: minikube
           url: https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+        - name: k3d
+          url: https://github.com/k3d-io/k3d/releases/latest/download/k3d-linux-amd64
 
     - name: fetch_terraform_version
       shell: "curl -s https://api.github.com/repos/hashicorp/terraform/releases/latest  | jq -r '.tag_name' | tr -d v"
@@ -109,7 +119,7 @@
     # Dotfiles starts
     - name: Download Dotfiles
       git:
-        repo: git@github.com:jingweno/dotfiles.git
+        repo: git@github.com:owenthereal/dotfiles.git
         dest: ~/.dotfiles
     - name: Link Dotfiles
       file:
@@ -158,7 +168,10 @@
       command: usermod -aG docker $USER
     - name: Fix Docker Network
       become: true
-      command: firewall-cmd --permanent --zone trusted --add-interface docker0
+      command: /bin/sh -c "firewall-cmd --permanent --zone trusted --add-interface docker0 || true"
+    - name: Fix Docker Network
+      become: true
+      command: /bin/sh -c "firewall-cmd --permanent --zone=FedoraWorkstation --add-masquerade || true"
     # Rootful Docker ends
 
     - name: Enable Night Light
