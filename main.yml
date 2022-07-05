@@ -11,6 +11,7 @@
         # Rootful Docker starts
         - https://download.docker.com/linux/fedora/docker-ce.repo
         # Rootful Docker ends
+        - https://rpm.releases.hashicorp.com/fedora/hashicorp.repo
     - name: Install packages
       become: true
       package:
@@ -35,6 +36,7 @@
           - ruby
           - tmux
           - util-linux-user
+          - vagrant
           - vim
           - vim-X11
           - "@virtualization"
@@ -64,6 +66,7 @@
       file:
         path: ~/.oh-my-zsh
         state: absent
+
     - include_tasks: install_script.yml
       with_items:
         - name: oh-my-zsh
@@ -71,6 +74,31 @@
         - name: space-vim
           url: https://raw.githubusercontent.com/liuchengxu/space-vim/master/install.sh
           args: --all
+
+    # Dotfiles starts
+    - name: Download Dotfiles
+      git:
+        repo: git@github.com:owenthereal/dotfiles.git
+        dest: ~/.dotfiles
+    - name: Link Dotfiles
+      file:
+        src: '~/.dotfiles/{{ item }}'
+        dest: '~/{{ item }}'
+        state: link
+        force: true
+      loop:
+        - .gemrc
+        - .gitignore
+        - .gitconfig
+        - .irbrc
+        - .spacevim
+        - .tmux.conf
+        - .zshrc
+        - .zshrc.linux
+    # Dotfiles ends
+
+    - include_tasks: install_script.yml
+      with_items:
         - name: goup
           url: https://raw.githubusercontent.com/jingweno/goup/master/install.sh
           args: --skip-prompt
@@ -115,28 +143,6 @@
         - url: https://github.com/kubernetes-sigs/krew/releases/latest/download/krew-linux_amd64.tar.gz
           bin_in_tar: krew-linux_amd64
           name: krew
-
-    # Dotfiles starts
-    - name: Download Dotfiles
-      git:
-        repo: git@github.com:owenthereal/dotfiles.git
-        dest: ~/.dotfiles
-    - name: Link Dotfiles
-      file:
-        src: '~/.dotfiles/{{ item }}'
-        dest: '~/{{ item }}'
-        state: link
-        force: true
-      loop:
-        - .gemrc
-        - .gitignore
-        - .gitconfig
-        - .irbrc
-        - .spacevim
-        - .tmux.conf
-        - .zshrc
-        - .zshrc.linux
-    # Dotfiles ends
 
     # Rootless Docker starts
     # Ref: https://docs.docker.com/engine/security/rootless
