@@ -172,12 +172,12 @@
     - name: Add User To Docker Group
       become: true
       command: usermod -aG docker $USER
-    - name: Fix Docker Network
-      become: true
-      command: /bin/sh -c "firewall-cmd --permanent --zone trusted --add-interface docker0 || true"
-    - name: Fix Docker Network
-      become: true
-      command: /bin/sh -c "firewall-cmd --permanent --zone=FedoraWorkstation --add-masquerade || true"
+    # - name: Fix Docker Network
+      # become: true
+      # command: /bin/sh -c "firewall-cmd --permanent --zone trusted --add-interface docker0 || true"
+    # - name: Fix Docker Network
+      # become: true
+      # command: /bin/sh -c "firewall-cmd --permanent --zone=FedoraWorkstation --add-masquerade || true"
     # Rootful Docker ends
 
     - name: Enable Night Light
